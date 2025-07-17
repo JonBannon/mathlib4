@@ -112,12 +112,16 @@ local infixr:25 " →ₛ " => SimpleFunc
 
 variable {R : Type*} [TopologicalSpace R] [InvolutiveStar R] [ContinuousStar R]
 
+/-- The type of simple functions inherits an involutive `star` operation
+from the target space. -/
 instance : InvolutiveStar (α →ₛ R) where
   star_involutive := by
     intro f
     ext x
     simp only [star_apply (star f), star_apply f, star_star]
 
+/-- The space of equivalence classes of a.e. strongly measurable functions
+inherits an involutive `star` operation from the target space. -/
 instance : InvolutiveStar (α →ₘ[μ] R) where
   star_involutive f := by
     ext
@@ -128,6 +132,7 @@ end AEEqFun
 
 variable {R : Type*} [NormedAddCommGroup R] [StarAddMonoid R] [NormedStarGroup R]
 
+/-- The `Lp` space inherits an involutive `star` operation from the target space. -/
 noncomputable instance {p : ℝ≥0∞} : InvolutiveStar (Lp R p μ) where
   star_involutive f := by
      ext
@@ -142,9 +147,17 @@ variable {R : Type*} [NormedRing R]
 
 section Mul
 
+/-- Define multiplication on `L^∞` by pointwise scalar multiplication: `f * g := f • g`.
+This operation agrees a.e. with the pointwise product of functions `f(x) * g(x)`,
+interpreting `f` as providing scalar coefficients acting on `g`. This is valid
+in `L^∞` because products of essentially bounded functions are again essentially bounded. -/
 noncomputable instance : Mul (Lp R ∞ μ) where
   mul f g := f • g
 
+/-- The multiplication defined on `L^∞` agrees a.e. with pointwise multiplication.
+Recall that multiplication on `Lp R ∞ μ` is defined by `f * g := f • g`. In the expression
+`⇑f * g`, the term `⇑f` is a function `α → R` and `g : Lp R ∞ μ` is acted on via the
+`SMul (α → R) (Lp R ∞ μ)` instance, so `⇑f * g` is just `⇑f • g`. -/
 lemma Linfty.coeFn_mul (f g : Lp R ∞ μ) : f * g =ᵐ[μ] ⇑f * g :=
   Lp.coeFn_lpSMul f g
 
@@ -152,7 +165,10 @@ end Mul
 
 section Const
 
-/-- Note: Unlike for general Lp, this does not require `IsFiniteMeasure` instance. -/
+/-- The constant function with value `c` belongs to `MemLp ∞ μ`, i.e., it defines an element of
+`L^∞`. Unlike in the general `Lp` case, no finiteness assumption on the measure is required:
+the essential supremum of a constant function is its norm.
+-/
 theorem memLinfty_const (c : R) : MemLp (fun _ : α => c) ∞ μ := by
   refine ⟨aestronglyMeasurable_const, ?_⟩
   by_cases hμ : μ = 0
@@ -160,18 +176,27 @@ theorem memLinfty_const (c : R) : MemLp (fun _ : α => c) ∞ μ := by
   · rw [eLpNorm_const c (ENNReal.top_ne_zero) hμ]
     simp
 
+/-- The theorem `memLinfty_const` gives a proof that the constant function with value `c` is
+in `MemLp ∞ μ`. This lemma takes the equivalence class (`AEEqFun.const α c`) and includes it as
+the first component of the pair representing an element of `Lp R ∞ μ`. -/
 theorem const_mem_Linfty (c : R) :
     @AEEqFun.const α _ _ μ _ c ∈ Lp R ∞ μ :=
   (memLinfty_const c).eLpNorm_mk_lt_top
 
+/-- The constant embedding into `L^∞(μ; R)` as an additive monoid homomorphism. That is,
+`Linfty.const` sends a scalar `c : R` to the constant function with value `c`,
+bundled as an element of `Lp R ∞ μ`. This is a `R →+ Lp R ∞ μ` morphism. -/
 def Linfty.const : R →+ Lp R ∞ μ where
   toFun c := ⟨AEEqFun.const α c, const_mem_Linfty c⟩
   map_zero' := rfl
   map_add' _ _ := rfl
 
+/-- The underlying `AEEqFun` representative of `Linfty.const c` is just `AEEqFun.const α c`. -/
 @[simp]
-lemma Linfty.const_val (c : R) : (Linfty.const c).1 = AEEqFun.const (β := R) (μ := μ) α c := rfl
+lemma Linfty.const_val (c : R) : (Linfty.const c).1 = AEEqFun.const (μ := μ) α c := rfl
 
+/-- The coercion of `Linfty.const c` to a function agrees a.e. with the pointwise
+constant function. `fun _ => c`. -/
 lemma Linfty.coeFn_const (c : R) : Linfty.const (μ := μ) c =ᵐ[μ] Function.const α c :=
   AEEqFun.coeFn_const α c
 
