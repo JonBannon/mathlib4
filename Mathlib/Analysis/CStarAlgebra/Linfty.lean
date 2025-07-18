@@ -38,11 +38,14 @@ local infixr:25 " →ₛ " => SimpleFunc
 
 variable {R : Type*} [Star R]
 
+/- Algebra.Star.Basic-/
 instance : Star (α →ₛ R) where
   star f := f.map Star.star
 
+/- Mathlib.MeasureTheory.Function.SimpleFunc-/
 lemma star_apply (f : α →ₛ R) (x : α) : (star f) x = star (f x) := rfl
 
+/- Mathlib.Topology.Algebra.Star-/
 /-- If `f =ᶠ[l] g`, then `star f =ᶠ[l] star g`. -/
 protected theorem _root_.Filter.EventuallyEq.star {f g : α → R}
     {l : Filter α} (h : f =ᶠ[l] g) :
@@ -51,6 +54,7 @@ protected theorem _root_.Filter.EventuallyEq.star {f g : α → R}
 
 variable [TopologicalSpace R] [ContinuousStar R]
 
+/- Mathlib.MeasureTheory.Function.StronglyMeasurable.Basic -/
 /-- Strong measurability is preserved under star. -/
 @[measurability]
 protected theorem StronglyMeasurable.star (f : α → R) (hf : StronglyMeasurable f) :
@@ -59,14 +63,17 @@ protected theorem StronglyMeasurable.star (f : α → R) (hf : StronglyMeasurabl
 
 variable {R : Type*} [TopologicalSpace R] [Star R] [ContinuousStar R]
 
+/- Mathlib.MeasureTheory.Function.StronglyMeasurable.AEStronglyMeasurable -/
 /-- AE strong measurability is preserved under star. -/
 protected theorem AEStronglyMeasurable.star {f : α → R} (hf : AEStronglyMeasurable f μ) :
     AEStronglyMeasurable (star f) μ :=
   ⟨star (hf.mk f), hf.stronglyMeasurable_mk.star, hf.ae_eq_mk.star⟩
 
+-- Mathlib.Algebra.Star.Basic
 instance : Star (α →ₘ[μ] R) where
   star f := (AEEqFun.comp _ continuous_star f)
 
+-- Mathlib.MeasureTheory.Function.AEEqFun
 /-- The coercion of `star f` from `α →ₘ[μ] R` to a function agrees almost everywhere
 with the pointwise star of `f`. -/
 lemma AEEqFun.coeFn_star (f : α →ₘ[μ] R) : ↑(star f) =ᵐ[μ] (star f : α → R) :=
@@ -78,26 +85,31 @@ section NormStar
 
 variable {R : Type*} [NormedAddCommGroup R] [StarAddMonoid R] [NormedStarGroup R]
 
+-- Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 /-- The `eLp` norm of a bare function is preserved under the `star` operation. -/
 @[simp]
 theorem eLpNorm_star {p : ℝ≥0∞} {f : α → R} : eLpNorm (star f) p μ = eLpNorm f p μ :=
   eLpNorm_congr_norm_ae <| .of_forall <| by simp
 
+-- Mathlib.MeasureTheory.Function.LpSeminorm.Basic
 /-- The `eLp` norm of `f : α →ₘ[μ] R` is preserved under `star`. -/
 @[simp]
 theorem AEEqFun.eLpNorm_star {p : ℝ≥0∞} {f : α →ₘ[μ] R} :
     eLpNorm (star f : α →ₘ[μ] R) p μ = eLpNorm f p μ :=
   eLpNorm_congr_ae (coeFn_star f) |>.trans <| by simp
 
+-- Mathlib.MeasureTheory.Function.LpSeminorm.Defs
 /-- If `f` is in `MemLp`, then so is `star f`. -/
 protected theorem MemLp.star {p : ℝ≥0∞} {f : α → R} (hf : MemLp f p μ) : MemLp (star f) p μ :=
   ⟨hf.1.star, by simpa using hf.2⟩
 
+-- Mathlib.Algebra.Star.Basic
 /-- The `Lp` space inherits a `Star` structure when `R` is a `NormedStarGroup`. -/
 protected noncomputable instance {p : ℝ≥0∞} : Star (Lp R p μ) where
   star f := ⟨star (f : α →ₘ[μ] R),
     by simpa [Lp.mem_Lp_iff_eLpNorm_lt_top] using Lp.eLpNorm_lt_top f⟩
 
+-- Mathlib.MeasureTheory.Function.LpSpace.Basic
 /-- The coercion of `star f` in `Lp` agrees a.e. with pointwise `star`. -/
 lemma Lp.coeFn_star {p : ℝ≥0∞} (f : Lp R p μ) : (star f : Lp R p μ) =ᵐ[μ] star f :=
     (f : α →ₘ[μ] R).coeFn_star
@@ -112,6 +124,7 @@ local infixr:25 " →ₛ " => SimpleFunc
 
 variable {R : Type*} [TopologicalSpace R] [InvolutiveStar R] [ContinuousStar R]
 
+-- Mathlib.Algebra.Star.Basic
 /-- The type of simple functions inherits an involutive `star` operation
 from the target space. -/
 instance : InvolutiveStar (α →ₛ R) where
@@ -120,6 +133,7 @@ instance : InvolutiveStar (α →ₛ R) where
     ext x
     simp only [star_apply (star f), star_apply f, star_star]
 
+-- Mathlib.Algebra.Star.Basic
 /-- The space of equivalence classes of a.e. strongly measurable functions
 inherits an involutive `star` operation from the target space. -/
 instance : InvolutiveStar (α →ₘ[μ] R) where
@@ -132,6 +146,7 @@ end AEEqFun
 
 variable {R : Type*} [NormedAddCommGroup R] [StarAddMonoid R] [NormedStarGroup R]
 
+-- Mathlib/MeasureTheory/Function/Lp/Basic.lean (Check with Jireh...)
 /-- The `Lp` space inherits an involutive `star` operation from the target space. -/
 noncomputable instance {p : ℝ≥0∞} : InvolutiveStar (Lp R p μ) where
   star_involutive f := by
@@ -217,7 +232,6 @@ theorem AEEqFun.one_smul (f : α →ₘ[μ] β) : (1 : α →ₘ[μ] β) • f =
   simp [smul_eq_mul, AEEqFun.one_mul]
 
 end AEEqFun
-
 
 instance Linfty.instOne : One (Lp R ∞ μ) where
   one := ⟨MemLp.toLp (fun (_ : α) => (1 : R)) (memLp_top_const (μ := μ) 1), SetLike.coe_mem _⟩
