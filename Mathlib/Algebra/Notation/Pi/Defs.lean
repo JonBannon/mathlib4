@@ -134,4 +134,18 @@ lemma _root_.Function.const_pow (a : M) (b : α) : const ι a ^ b = const ι (a 
 lemma pow_comp (f : β → M) (a : α) (g : ι → β) : (f ^ a) ∘ g = f ∘ g ^ a := rfl
 
 end Pow
+
+section Star
+
+universe u v
+
+variable {I : Type u}
+
+-- The indexing type
+variable {f : I → Type v}
+
+instance [∀ i, Star (f i)] : Star (∀ i, f i) where star x i := star (x i)
+
+end Star
+
 end Pi
