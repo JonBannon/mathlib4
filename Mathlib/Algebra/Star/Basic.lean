@@ -37,15 +37,9 @@ universe u v w
 
 open MulOpposite
 
-
-
 variable {R : Type u}
 
 export Star (star)
-
-/-- A star operation (e.g. complex conjugate).
--/
-add_decl_doc star
 
 /-- `StarMemClass S G` states `S` is a type of subsets `s ⊆ G` closed under star. -/
 class StarMemClass (S R : Type*) [Star R] [SetLike S R] : Prop where

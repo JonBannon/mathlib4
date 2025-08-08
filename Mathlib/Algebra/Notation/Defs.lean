@@ -147,6 +147,8 @@ lemma ite_div_ite (a b c d : α) :
 
 end Div
 
+end ite
+
 section Star
 
 /-- Notation typeclass (with no default notation!) for an algebraic structure with a star operation.
@@ -155,8 +157,6 @@ class Star (R : Type u) where
   star : R → R
 
 end Star
-
-end ite
 
 variable {α : Type u}
 
