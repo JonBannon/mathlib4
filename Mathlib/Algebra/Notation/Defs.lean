@@ -146,6 +146,16 @@ lemma ite_div_ite (a b c d : α) :
     ((if P then a else b) / if P then c else d) = if P then a / c else b / d := dite_div_dite ..
 
 end Div
+
+section Star
+
+/-- Notation typeclass (with no default notation!) for an algebraic structure with a star operation.
+-/
+class Star (R : Type u) where
+  star : R → R
+
+end Star
+
 end ite
 
 variable {α : Type u}

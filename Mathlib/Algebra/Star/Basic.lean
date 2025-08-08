@@ -37,10 +37,7 @@ universe u v w
 
 open MulOpposite
 
-/-- Notation typeclass (with no default notation!) for an algebraic structure with a star operation.
--/
-class Star (R : Type u) where
-  star : R → R
+
 
 variable {R : Type u}
 
