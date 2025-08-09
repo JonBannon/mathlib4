@@ -3,13 +3,7 @@ Copyright (c) 2025 Jon Bannon. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Bannon and Jireh Loreaux
 -/
---import Mathlib.Algebra.Group.Action.Opposite
---import Mathlib.Algebra.Group.Action.Units
---import Mathlib.Algebra.Group.Invertible.Defs
---import Mathlib.Algebra.GroupWithZero.Units.Lemmas
---import Mathlib.Algebra.Ring.Aut
---import Mathlib.Algebra.Ring.CompTypeclasses
---import Mathlib.Algebra.Ring.Opposite
+
 import Mathlib.Data.Int.Cast.Lemmas
 import Mathlib.Data.SetLike.Basic
 
@@ -82,3 +76,31 @@ class StarMul (R : Type u) [Mul R] extends InvolutiveStar R where
 export StarMul (star_mul)
 
 attribute [simp 900] star_mul
+
+/-- A `*`-additive monoid `R` is an additive monoid with an involutive `star` operation which
+preserves addition. -/
+class StarAddMonoid (R : Type u) [AddMonoid R] extends InvolutiveStar R where
+  /-- `star` commutes with addition -/
+  star_add : ∀ r s : R, star (r + s) = star r + star s
+
+export StarAddMonoid (star_add)
+
+attribute [simp] star_add
+
+/-- `star` as an `AddEquiv` -/
+@[simps apply]
+def starAddEquiv [AddMonoid R] [StarAddMonoid R] : R ≃+ R :=
+  { InvolutiveStar.star_involutive.toPerm star with
+    toFun := star
+    map_add' := star_add }
+
+/-- A `*`-ring `R` is a non-unital, non-associative (semi)ring with an involutive `star` operation
+which is additive which makes `R` with its multiplicative structure into a `*`-multiplication
+(i.e. `star (r * s) = star s * star r`). -/
+class StarRing (R : Type u) [NonUnitalNonAssocSemiring R] extends StarMul R where
+  /-- `star` commutes with addition -/
+  star_add : ∀ r s : R, star (r + s) = star r + star s
+
+instance (priority := 100) StarRing.toStarAddMonoid [NonUnitalNonAssocSemiring R] [StarRing R] :
+    StarAddMonoid R where
+  star_add := StarRing.star_add
