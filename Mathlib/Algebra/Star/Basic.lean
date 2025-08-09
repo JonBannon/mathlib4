@@ -32,43 +32,6 @@ Our star rings are actually star non-unital, non-associative, semirings, but of 
 `star_neg : star (-r) = - star r` when the underlying semiring is a ring.
 -/
 
-assert_not_exists Finset Subgroup Rat.instField
-
-universe u v w
-
-open MulOpposite
-
-variable {R : Type u}
-
-export Star (star)
-
-/-- `StarMemClass S G` states `S` is a type of subsets `s ⊆ G` closed under star. -/
-class StarMemClass (S R : Type*) [Star R] [SetLike S R] : Prop where
-  /-- Closure under star. -/
-  star_mem : ∀ {s : S} {r : R}, r ∈ s → star r ∈ s
-
-export StarMemClass (star_mem)
-
-attribute [aesop 90% (rule_sets := [SetLike])] star_mem
-
-namespace StarMemClass
-
-variable {S : Type w} [Star R] [SetLike S R] [hS : StarMemClass S R] (s : S)
-
-instance instStar : Star s where
-  star r := ⟨star (r : R), star_mem r.prop⟩
-
-@[simp] lemma coe_star (x : s) : star x = star (x : R) := rfl
-
-end StarMemClass
-
-/-- Typeclass for a star operation with is involutive.
--/
-class InvolutiveStar (R : Type u) extends Star R where
-  /-- Involutive condition. -/
-  star_involutive : Function.Involutive star
-
-export InvolutiveStar (star_involutive)
 
 @[simp]
 theorem star_star [InvolutiveStar R] (r : R) : star (star r) = r :=
