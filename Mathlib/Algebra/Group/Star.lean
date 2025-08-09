@@ -1,7 +1,9 @@
+/-
 Copyright (c) 2025 Jon Bannon. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Bannon and Jireh Loreaux
 -/
+
 import Mathlib.Algebra.Group.Action.Opposite
 import Mathlib.Algebra.Group.Action.Units
 import Mathlib.Algebra.Group.Invertible.Defs
