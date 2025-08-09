@@ -137,6 +137,8 @@ end Pow
 
 section Star
 
+open Star
+
 universe u v
 
 variable {I : Type u}

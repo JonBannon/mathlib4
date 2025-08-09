@@ -5,6 +5,7 @@ Authors: Eric Wieser
 -/
 import Mathlib.Algebra.Star.Basic
 import Mathlib.Algebra.Ring.Pi
+import Mathlib.Algebra.Notation.Pi
 
 /-!
 # `star` on pi types
