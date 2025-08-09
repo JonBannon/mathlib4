@@ -111,3 +111,22 @@ def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
   { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
     toFun := fun x => MulOpposite.op (star x)
     map_mul' := fun x y => by simp only [star_mul, op_mul] }
+
+/-- Any commutative monoid admits the trivial `*`-structure.
+
+See note [reducible non-instances].
+-/
+abbrev starMulOfComm {R : Type*} [CommMonoid R] : StarMul R where
+  star := id
+  star_involutive _ := rfl
+  star_mul := mul_comm
+
+section
+
+attribute [local instance] starMulOfComm
+
+/-- Note that since `starMulOfComm` is reducible, `simp` can already prove this. -/
+theorem star_id_of_comm {R : Type*} [CommMonoid R] {x : R} : star x = x :=
+  rfl
+
+end

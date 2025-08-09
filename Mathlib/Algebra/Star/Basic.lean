@@ -88,26 +88,6 @@ theorem commute_star_comm {x y : R} : Commute (star x) y ↔ Commute x (star y) 
 
 end StarMul
 
-
-/-- Any commutative monoid admits the trivial `*`-structure.
-
-See note [reducible non-instances].
--/
-abbrev starMulOfComm {R : Type*} [CommMonoid R] : StarMul R where
-  star := id
-  star_involutive _ := rfl
-  star_mul := mul_comm
-
-section
-
-attribute [local instance] starMulOfComm
-
-/-- Note that since `starMulOfComm` is reducible, `simp` can already prove this. -/
-theorem star_id_of_comm {R : Type*} [CommMonoid R] {x : R} : star x = x :=
-  rfl
-
-end
-
 variable (R) in
 @[simp]
 theorem star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0 :=
@@ -136,16 +116,6 @@ theorem star_nsmul [AddMonoid R] [StarAddMonoid R] (n : ℕ) (x : R) : star (n �
 theorem star_zsmul [AddGroup R] [StarAddMonoid R] (n : ℤ) (x : R) : star (n • x) = n • star x :=
   (starAddEquiv : R ≃+ R).toAddMonoidHom.map_zsmul _ _
 
-
-/-- `star` as a `RingEquiv` from `R` to `Rᵐᵒᵖ` -/
-@[simps apply]
-def starRingEquiv [NonUnitalNonAssocSemiring R] [StarRing R] : R ≃+* Rᵐᵒᵖ :=
-  { starAddEquiv.trans (MulOpposite.opAddEquiv : R ≃+ Rᵐᵒᵖ), starMulEquiv with
-    toFun := fun x => MulOpposite.op (star x) }
-
-@[simp, norm_cast]
-theorem star_natCast [NonAssocSemiring R] [StarRing R] (n : ℕ) : star (n : R) = n :=
-  (congr_arg unop (map_natCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) n)).trans (unop_natCast _)
 
 @[simp]
 theorem star_ofNat [NonAssocSemiring R] [StarRing R] (n : ℕ) [n.AtLeastTwo] :
