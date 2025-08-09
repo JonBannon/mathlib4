@@ -28,6 +28,13 @@ variable {R : Type u}
 
 open MulOpposite
 
+/-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
+@[simps apply]
+def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
+  { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
+    toFun := fun x => MulOpposite.op (star x)
+    map_mul' := fun x y => by simp only [star_mul, op_mul] }
+
 @[simp]
 theorem star_inv₀ [GroupWithZero R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹ :=
   op_injective <| (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
@@ -46,13 +53,6 @@ theorem star_div₀ [CommGroupWithZero R] [StarMul R] (x y : R) : star (x / y) =
 @[simp]
 theorem star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) = star x * star y :=
   (star_mul x y).trans (mul_comm _ _)
-
-/-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
-@[simps apply]
-def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
-  { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
-    toFun := fun x => MulOpposite.op (star x)
-    map_mul' := fun x y => by simp only [star_mul, op_mul] }
 
 /-- `star` as a `MulAut` for commutative `R`. -/
 @[simps apply]
