@@ -21,3 +21,23 @@ import Mathlib.Algebra.Star.Defs
 Write this.
 
 -/
+
+universe u v w
+
+variable {R : Type u}
+
+open MulOpposite
+
+@[simp]
+theorem star_inv₀ [GroupWithZero R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹ :=
+  op_injective <| (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
+
+@[simp]
+theorem star_zpow₀ [GroupWithZero R] [StarMul R] (x : R) (z : ℤ) : star (x ^ z) = star x ^ z :=
+  op_injective <| (map_zpow₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x z).trans (op_zpow (star x) z).symm
+
+/-- When multiplication is commutative, `star` preserves division. -/
+@[simp]
+theorem star_div₀ [CommGroupWithZero R] [StarMul R] (x y : R) : star (x / y) = star x / star y := by
+  apply op_injective
+  rw [division_def, op_div, mul_comm, star_mul, star_inv₀, op_mul, op_inv]
