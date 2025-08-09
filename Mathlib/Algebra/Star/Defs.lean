@@ -7,7 +7,7 @@ Authors: Jon Bannon and Jireh Loreaux
 --import Mathlib.Algebra.Group.Action.Units
 --import Mathlib.Algebra.Group.Invertible.Defs
 --import Mathlib.Algebra.GroupWithZero.Units.Lemmas
---import Mathlib.Algebra.Ring.Aut
+import Mathlib.Algebra.Ring.Aut
 --import Mathlib.Algebra.Ring.CompTypeclasses
 --import Mathlib.Algebra.Ring.Opposite
 import Mathlib.Data.Int.Cast.Lemmas
