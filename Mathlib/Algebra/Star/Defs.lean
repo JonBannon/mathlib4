@@ -7,7 +7,7 @@ Authors: Jon Bannon and Jireh Loreaux
 --import Mathlib.Algebra.Group.Action.Units
 --import Mathlib.Algebra.Group.Invertible.Defs
 --import Mathlib.Algebra.GroupWithZero.Units.Lemmas
-import Mathlib.Algebra.Ring.Aut
+--import Mathlib.Algebra.Ring.Aut
 --import Mathlib.Algebra.Ring.CompTypeclasses
 --import Mathlib.Algebra.Ring.Opposite
 import Mathlib.Data.Int.Cast.Lemmas
@@ -82,22 +82,3 @@ class StarMul (R : Type u) [Mul R] extends InvolutiveStar R where
 export StarMul (star_mul)
 
 attribute [simp 900] star_mul
-
-/-- In a commutative ring, make `simp` prefer leaving the order unchanged. -/
-@[simp]
-theorem star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) = star x * star y :=
-  (star_mul x y).trans (mul_comm _ _)
-
-/-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
-@[simps apply]
-def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
-  { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
-    toFun := fun x => MulOpposite.op (star x)
-    map_mul' := fun x y => by simp only [star_mul, op_mul] }
-
-/-- `star` as a `MulAut` for commutative `R`. -/
-@[simps apply]
-def starMulAut [CommSemigroup R] [StarMul R] : MulAut R :=
-  { InvolutiveStar.star_involutive.toPerm star with
-    toFun := star
-    map_mul' := star_mul' }

@@ -41,3 +41,22 @@ theorem star_zpow₀ [GroupWithZero R] [StarMul R] (x : R) (z : ℤ) : star (x ^
 theorem star_div₀ [CommGroupWithZero R] [StarMul R] (x y : R) : star (x / y) = star x / star y := by
   apply op_injective
   rw [division_def, op_div, mul_comm, star_mul, star_inv₀, op_mul, op_inv]
+
+/-- In a commutative ring, make `simp` prefer leaving the order unchanged. -/
+@[simp]
+theorem star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) = star x * star y :=
+  (star_mul x y).trans (mul_comm _ _)
+
+/-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
+@[simps apply]
+def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
+  { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
+    toFun := fun x => MulOpposite.op (star x)
+    map_mul' := fun x y => by simp only [star_mul, op_mul] }
+
+/-- `star` as a `MulAut` for commutative `R`. -/
+@[simps apply]
+def starMulAut [CommSemigroup R] [StarMul R] : MulAut R :=
+  { InvolutiveStar.star_involutive.toPerm star with
+    toFun := star
+    map_mul' := star_mul' }
