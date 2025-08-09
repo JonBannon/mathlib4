@@ -92,25 +92,6 @@ theorem commute_star_comm {x y : R} : Commute (star x) y ↔ Commute x (star y) 
 
 end StarMul
 
-/-- In a commutative ring, make `simp` prefer leaving the order unchanged. -/
-@[simp]
-theorem star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) = star x * star y :=
-  (star_mul x y).trans (mul_comm _ _)
-
-/-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
-@[simps apply]
-def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
-  { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
-    toFun := fun x => MulOpposite.op (star x)
-    map_mul' := fun x y => by simp only [star_mul, op_mul] }
-
-/-- `star` as a `MulAut` for commutative `R`. -/
-@[simps apply]
-def starMulAut [CommSemigroup R] [StarMul R] : MulAut R :=
-  { InvolutiveStar.star_involutive.toPerm star with
-    toFun := star
-    map_mul' := star_mul' }
-
 variable (R) in
 @[simp]
 theorem star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1 :=
