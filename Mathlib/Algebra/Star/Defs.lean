@@ -130,3 +130,16 @@ theorem star_id_of_comm {R : Type*} [CommMonoid R] {x : R} : star x = x :=
   rfl
 
 end
+
+@[simp]
+theorem star_ofNat [NonAssocSemiring R] [StarRing R] (n : ℕ) [n.AtLeastTwo] :
+    star (ofNat(n) : R) = ofNat(n) :=
+  star_natCast _
+
+section
+
+@[simp, norm_cast]
+theorem star_intCast [NonAssocRing R] [StarRing R] (z : ℤ) : star (z : R) = z :=
+  (congr_arg unop <| map_intCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) z).trans (unop_intCast _)
+
+end
