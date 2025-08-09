@@ -32,6 +32,11 @@ Our star rings are actually star non-unital, non-associative, semirings, but of 
 `star_neg : star (-r) = - star r` when the underlying semiring is a ring.
 -/
 
+universe u v w
+
+open MulOpposite
+
+variable {R : Type u}
 
 @[simp]
 theorem star_star [InvolutiveStar R] (r : R) : star (star r) = r :=
@@ -52,10 +57,6 @@ theorem mem_of_star_mem {S R : Type*} [InvolutiveStar R] [SetLike S R] [StarMemC
 theorem star_inj [InvolutiveStar R] {x y : R} : star x = star y ↔ x = y :=
   star_injective.eq_iff
 
-/-- `star` as an equivalence when it is involutive. -/
-protected def Equiv.star [InvolutiveStar R] : Equiv.Perm R :=
-  star_involutive.toPerm _
-
 theorem eq_star_of_eq_star [InvolutiveStar R] {r s : R} (h : r = star s) : s = star r := by
   simp [h]
 
@@ -64,27 +65,6 @@ theorem eq_star_iff_eq_star [InvolutiveStar R] {r s : R} : r = star s ↔ s = st
 
 theorem star_eq_iff_star_eq [InvolutiveStar R] {r s : R} : star r = s ↔ star s = r :=
   eq_comm.trans <| eq_star_iff_eq_star.trans eq_comm
-
-/-- Typeclass for a trivial star operation. This is mostly meant for `ℝ`.
--/
-class TrivialStar (R : Type u) [Star R] : Prop where
-  /-- Condition that star is trivial -/
-  star_trivial : ∀ r : R, star r = r
-
-export TrivialStar (star_trivial)
-
-attribute [simp] star_trivial
-
-/-- A `*`-magma is a magma `R` with an involutive operation `star`
-such that `star (r * s) = star s * star r`.
--/
-class StarMul (R : Type u) [Mul R] extends InvolutiveStar R where
-  /-- `star` skew-distributes over multiplication. -/
-  star_mul : ∀ r s : R, star (r * s) = star s * star r
-
-export StarMul (star_mul)
-
-attribute [simp 900] star_mul
 
 section StarMul
 

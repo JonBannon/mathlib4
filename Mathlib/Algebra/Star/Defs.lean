@@ -58,3 +58,28 @@ class InvolutiveStar (R : Type u) extends Star R where
   star_involutive : Function.Involutive star
 
 export InvolutiveStar (star_involutive)
+
+/-- `star` as an equivalence when it is involutive. -/
+protected def Equiv.star [InvolutiveStar R] : Equiv.Perm R :=
+  star_involutive.toPerm _
+
+/-- Typeclass for a trivial star operation. This is mostly meant for `ℝ`.
+-/
+class TrivialStar (R : Type u) [Star R] : Prop where
+  /-- Condition that star is trivial -/
+  star_trivial : ∀ r : R, star r = r
+
+export TrivialStar (star_trivial)
+
+attribute [simp] star_trivial
+
+/-- A `*`-magma is a magma `R` with an involutive operation `star`
+such that `star (r * s) = star s * star r`.
+-/
+class StarMul (R : Type u) [Mul R] extends InvolutiveStar R where
+  /-- `star` skew-distributes over multiplication. -/
+  star_mul : ∀ r s : R, star (r * s) = star s * star r
+
+export StarMul (star_mul)
+
+attribute [simp 900] star_mul
