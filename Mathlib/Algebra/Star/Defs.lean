@@ -104,3 +104,10 @@ class StarRing (R : Type u) [NonUnitalNonAssocSemiring R] extends StarMul R wher
 instance (priority := 100) StarRing.toStarAddMonoid [NonUnitalNonAssocSemiring R] [StarRing R] :
     StarAddMonoid R where
   star_add := StarRing.star_add
+
+/-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
+@[simps apply]
+def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
+  { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
+    toFun := fun x => MulOpposite.op (star x)
+    map_mul' := fun x y => by simp only [star_mul, op_mul] }
