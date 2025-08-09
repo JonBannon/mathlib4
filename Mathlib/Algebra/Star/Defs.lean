@@ -13,6 +13,7 @@ import Mathlib.Algebra.Ring.Opposite
 import Mathlib.Data.Int.Cast.Lemmas
 import Mathlib.Data.SetLike.Basic
 import Mathlib.Algebra.Group.Star
+import Mathlib.Algebra.Star.Basic
 
 /-!
 # Star rings and modules
