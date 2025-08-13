@@ -928,7 +928,10 @@ section Star
 Right now, there is no `MeasureTheory.AEEqFun.coeFn_star` etc. I expect the requisite
 file will be transitively imported above, but it can be included if not. I've also
 included the `InvolutiveStar` instance for `Lp`. These may need different homes, but we can
-check once things are working. -/
+check once things are working. For the PR we might try the naming:
+
+feat(MeasureTheory): add `Star` and `InvolutiveStar` instances for `Lp`
+ -/
 
 open MeasureTheory AEEqFun
 
