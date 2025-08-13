@@ -916,12 +916,6 @@ theorem meas_ge_le_mul_pow_enorm (f : Lp E p μ) (hp_ne_zero : p ≠ 0) (hp_ne_t
   (ENNReal.ofReal_toReal (eLpNorm_ne_top f)).symm ▸
     meas_ge_le_mul_pow_eLpNorm_enorm μ hp_ne_zero hp_ne_top (Lp.aestronglyMeasurable f) hε (by simp)
 
-@[deprecated (since := "2025-01-20")] alias pow_mul_meas_ge_le_norm := pow_mul_meas_ge_le_enorm
-@[deprecated (since := "2025-01-20")] alias mul_meas_ge_le_pow_norm := mul_meas_ge_le_pow_enorm
-@[deprecated (since := "2025-01-20")] alias mul_meas_ge_le_pow_norm' := mul_meas_ge_le_pow_enorm'
-@[deprecated (since := "2025-01-20")] alias meas_ge_le_mul_pow_norm := meas_ge_le_mul_pow_enorm
-
-end MeasureTheory.Lp
 section Star
 
 /- This is for the next PR. It will work once the `AEEqFun` PR goes through.
@@ -961,3 +955,10 @@ noncomputable instance {p : ℝ≥0∞} : InvolutiveStar (Lp R p μ) where
      exact congrFun (congrArg AEEqFun.cast <| star_involutive f.1)
 
 end Star
+
+@[deprecated (since := "2025-01-20")] alias pow_mul_meas_ge_le_norm := pow_mul_meas_ge_le_enorm
+@[deprecated (since := "2025-01-20")] alias mul_meas_ge_le_pow_norm := mul_meas_ge_le_pow_enorm
+@[deprecated (since := "2025-01-20")] alias mul_meas_ge_le_pow_norm' := mul_meas_ge_le_pow_enorm'
+@[deprecated (since := "2025-01-20")] alias meas_ge_le_mul_pow_norm := meas_ge_le_mul_pow_enorm
+
+end MeasureTheory.Lp
